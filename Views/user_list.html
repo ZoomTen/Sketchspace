@@ -1,0 +1,27 @@
+{% extends Views/_layout.html %}
+
+{% block title %}Sketchspace{% endblock %}
+
+{% block mainContent %}
+    <section class="boxing">
+        <h2>User list</h2>
+        <div>
+            <table id="user-list">
+                <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Member since</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% foreach ($user_list as $u): %}
+                <tr>
+                    <td><a href="/user/{{{ $u->getUsername() }}}">{{{ $u->getUsername() }}}</a></td>
+                    <td>{{{ $u->getJoinDate()->format(SKETCHSPACE_DATE_FMT) }}}</td>
+                </tr>
+                {% endforeach; %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+{% endblock %}

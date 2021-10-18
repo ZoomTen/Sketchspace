@@ -1,0 +1,136 @@
+{% extends Views/_rubrics.html %}
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+		<meta charset="utf-8">
+		<title>{% yield title %}</title>
+		<link rel="stylesheet" href="/assets/screen.css" media="screen,projection,tv">
+	</head>
+	<body>
+		<div class="page-container">
+			<div id="top-bar">
+				<h1>SketchSpace</h1>
+				<nav id="main-menu">
+					<ul>
+						<li><a href="/">Home</a></li>
+						<li><a href="/register">Join us</a></li>
+						<li>Help</li>
+						<li>Contact</li>
+					</ul>
+				</nav>
+				{% if (isset($logged_in_user)): %}
+				<ul id="user-brief" class="horizontal-menu">
+					<li>
+						Welcome,
+						<a href="/user/{{{ $logged_in_user->getUsername() }}}">
+							<b>{{{ $logged_in_user->getUsername() }}}</b>
+						</a>
+					</li>
+					<li>
+						Edit my profile
+					</li>
+					<li>
+						Add a submission
+					</li>
+					<li>
+						User preferences
+					</li>
+					<li>
+						<a href="/logout">Log out</a>
+					</li>
+				</ul>
+				{% else: %}
+				<form id="menu-login" action="/login" method="post">
+					<fieldset>
+						<label for="login_uname">Username</label>
+                        <input type="text" name="u" id="login_uname"/>
+						<label for="login_pw">Password</label>
+						<input type="password" name="p" id="login_pw"/>
+						<button>Login</button>
+					</fieldset>
+				</form>
+				{% endif; %}
+			</div>
+
+			<div id="content-container">
+				<div id="nav-sidebar">
+					<aside class="boxing">
+						<h2>Search</h2>
+						<form>
+							<fieldset>
+								<label for="search_q">Find</label>
+								<input type="text" name="q" id="search_q"/>
+								<button>Search</button>
+							</fieldset>
+						</form>
+					</aside>
+
+					<aside class="boxing">
+						<h2>Submissions</h2>
+						<ul>
+							<li>Latest</li>
+							<li>All</li>
+						</ul>
+					</aside>
+
+					<aside class="boxing">
+						<h2>Miscellaneous</h2>
+						<ul>
+							<li>Change log</li>
+							<li>88x31 buttons</li>
+						</ul>
+					</aside>
+
+					<aside class="boxing">
+						<h2>Community</h2>
+						<ul>
+							<li><a href="/users">User list</a></li>
+						</ul>
+					</aside>
+				</div>
+				<main>
+					{% if (!empty($messages)): %}
+						<div class="visually-hidden"><h2>Notifications</h2></div>
+						<ul class="notifications">
+						{% foreach ($messages as $message): %}
+							<li class="notification-{{{ $message[0] }}}">{{{ $message[1] }}}</li>
+						{% endforeach; %}
+						</ul>
+					{% endif; %}
+					{% yield mainContent %}
+				</main>
+				<div id="featured-sidebar">
+					<aside class="boxing">
+						<h2>The Fun Stuff!</h2>
+						{% yield siteUpdates %}
+					</aside>
+
+					<aside class="boxing">
+						<h2>Partners</h2>
+						<ul>
+							<li>A</li>
+							<li>B</li>
+						</ul>
+					</aside>
+
+					<aside class="boxing">
+						<h2>Featured Submission</h2>
+						{% yield subOfTheWeek %}
+					</aside>
+
+					<aside class="boxing">
+						<h2>Appreciation Station</h2>
+						{% yield kindWords %}
+					</aside>
+				</div>
+			</div>
+
+			<footer>
+				<hr>
+				<span>&copy; ZoomTen 2021.</span>
+				<br>
+				<span><a href="https://github.com/ZoomTen/Sketchspace">View the source code here</a></span>
+			</footer>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,5 @@
+/.idea/
+/cache/
+/.sessions.json
+/.throttle.json
+/phpdoc.phar

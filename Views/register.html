@@ -1,0 +1,55 @@
+{% extends Views/_layout.html %}
+
+{% block title %}Sketchspace{% endblock %}
+
+{% block mainContent %}
+<div class="boxing">
+	<h2>So you wanna join us?</h2>
+	<p>
+		It's simple, really. All you gotta do is
+		fill out the required fields (shown underlined) in the
+		form below, annnnd there you have it.
+	</p>
+	<p>
+		What does this even do? Well, you'll
+		be able to upload stuff, comment on
+		stuff, let other users know you
+		like their stuff, etc. Bookmarking?
+		Well, you have your good ol' web
+		browser for that. :p
+	</p>
+	<p>
+		So what are you waiting for? Come on down!
+	</p>
+</div>
+<div class="boxing">
+	<h2>Fill 'em</h2>
+	<form method="post" class="standard-form">
+		<fieldset>
+			<legend>Basic information</legend>
+			<label for="register-uname" class="input-required"><u>Username</u></label>
+			<input type="text" name="u" placeholder="boaty" id="register-uname" value="{{{ $form_save['u'] }}}" required>
+			<br>
+			<label for="register-fname" class="input-required"><u>Full name</u></label>
+			<input type="text" name="fn" placeholder="Boaty McBoatface" id="register-fname" value="{{{ $form_save['fn'] }}}" required>
+			<br>
+			<label for="register-pw" class="input-required"><u>Password</u></label>
+			<input type="password" name="pw" id="register-pw" required>
+			<br>
+			<label for="register-cpw" class="input-required"><u>Confirm password</u></label>
+			<input type="password" name="cpw" id="register-cpw" required>
+		</fieldset>
+		<fieldset>
+			<legend>Additional information</legend>
+			<label for="register-email" class="input-required"><u>E-mail address</u></label>
+			<input type="email" name="e" placeholder="boaty@mcface.com" id="register-email" value="{{{ $form_save['e'] }}}" required>
+			<br>
+			<label for="register-url">Website</label>
+			<input type="text" name="w" placeholder="https://mcface.com" id="register-url">
+		</fieldset>
+		<fieldset>
+			<button>Register</button>
+		</fieldset>
+	</form>
+</div>
+{% endblock %}
