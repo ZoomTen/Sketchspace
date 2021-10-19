@@ -60,13 +60,14 @@ body {
 }
 
 .boxing {
-  margin-bottom: 1em;
+  max-width: 90vw;
+  margin: auto auto 1em;
   background-color: var(--inner-bg-color);
 }
 
 #content-container {
   display: grid;
-  grid-template-columns: 20% 1fr 20%;
+  grid-template-columns: 15% 1fr 15%;
   border-top: 1px solid var(--dark-accent);
 }
 
@@ -113,7 +114,7 @@ hr {
 }
 
 .boxing>* {
-  padding: .3em
+  padding: .5em
 }
 
 #nav-sidebar .boxing h2 {
@@ -154,11 +155,13 @@ ul {
 .horizontal-menu {
   margin: 0;
   display: flex;
+  flex-wrap: wrap;
   width: 100%
 }
 
 .horizontal-menu li {
-  display: inline-block;
+  display: block;
+  padding: .2em;
   flex-grow: 1;
   text-align: center
 }
@@ -169,7 +172,7 @@ ul {
 
 .boxing table {
   width: 100%;
-  border-collapse: collapse
+  border-collapse: collapse;
 }
 
 .boxing table td {
@@ -240,12 +243,57 @@ a {
 
 @media screen and (max-width: 90em){
   .page-container {
-    max-width: 90%;
+    max-width: 95%;
   }
+
+  #content-container {
+    grid-template-columns: 20% 1fr 20%;
+  }
+}
+
+main {
+  max-width: 100%;
 }
 
 #nav-sidebar, #featured-sidebar {
   background-color: var(--inner-bg-color-accent);
+}
+
+button {
+  border: 3px outset black;
+  box-shadow: 0 0 0 1px black;
+  border-radius: 3px;
+  font-size: .7em;
+}
+
+#menu-login fieldset {
+  display: flex;
+  flex-wrap: wrap;
+}
+#menu-login .form-row {
+  margin: 0 1em;
+}
+
+#search-form fieldset{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#search-form button {
+  margin: auto;
+}
+
+#search_q {
+  width: 100%;
+  margin: .5em 0;
+}
+.table-wrapper {
+  overflow-x: auto;
+}
+
+#user-brief {
+  max-width: 80%;
+  margin: auto;
 }
 @media screen and (max-width: 50em){
   .page-container {
@@ -265,4 +313,13 @@ a {
      flex-grow: 1;
       margin: .25em;
    }
+  #user-brief {
+    max-width: 100%;
+  }
+}
+
+@media screen and (min-width: 150em){
+  #content-container {
+    grid-template-columns: 10% 1fr 10%;
+  }
 }

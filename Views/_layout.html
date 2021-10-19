@@ -5,6 +5,7 @@
 		<meta charset="utf-8">
 		<title>{% yield title %}</title>
 		<link rel="stylesheet" href="/assets/screen.css" media="screen,projection,tv">
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1">
 	</head>
 	<body>
 		<div class="page-container">
@@ -42,10 +43,14 @@
 				{% else: %}
 				<form id="menu-login" action="/login" method="post">
 					<fieldset>
-						<label for="login_uname">Username</label>
-                        <input type="text" name="u" id="login_uname"/>
-						<label for="login_pw">Password</label>
-						<input type="password" name="p" id="login_pw"/>
+						<div class="form-row">
+							<label for="login_uname">Username</label>
+							<input type="text" name="u" id="login_uname"/>
+						</div>
+						<div class="form-row">
+							<label for="login_pw">Password</label>
+							<input type="password" name="p" id="login_pw"/>
+						</div>
 						<button>Login</button>
 					</fieldset>
 				</form>
@@ -56,7 +61,7 @@
 				<div id="nav-sidebar">
 					<aside class="boxing">
 						<h2>Search</h2>
-						<form>
+						<form id="search-form">
 							<fieldset>
 								<label for="search_q">Find</label>
 								<input type="text" name="q" id="search_q"/>

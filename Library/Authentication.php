@@ -3,16 +3,21 @@
 namespace Sketchspace\Library;
 use Sketchspace\Exception\MissingParametersException;
 use Sketchspace\Exception\RegisterException;
+use Sketchspace\Exception\ValidationError;
 use Sketchspace\Object\User;
 use Sketchspace\Exception\TooManyRequestsException;
 use Sketchspace\Exception\InvalidParameterException;
 
 class Authentication
 {
+    // define array keys
     const SESSION_CURRENT_USER = 'user';
     const SESSION_IDENTIFIER = 'session_id';
     const SESSION_LASTLOGIN = 'last_login';
 
+    /**
+     * Set up sessions and secure headers
+     */
     private static function init(): void
     {
         // prevent clickjacking
@@ -21,12 +26,13 @@ class Authentication
         header('X-Content-Type-Options: nosniff');
         // disable caching of potentially sensitive data
         header('Cache-Control: no-store, no-cache, must-revalidate', true);
-        header('Expires: Thu, 19 Nov 1981 00:00:00 GMT', true);
+        header('Expires: Wed, 04 Apr 1984 00:00:00 GMT', true);
         header('Pragma: no-cache', true);
 
+        // handle session validity
         if (session_status() == PHP_SESSION_ACTIVE) {
             if (isset($_SESSION[self::SESSION_CURRENT_USER])) {
-                // prevent session ID hijacking
+                // check for correct identifier, prevents session ID hijacking
                 if ($_SESSION[self::SESSION_IDENTIFIER] != self::getConnectionID()) {
                     self::unsetAll();
                 }
@@ -41,6 +47,10 @@ class Authentication
         }
     }
 
+    /**
+     * A unique connection ID calculated from a host's IP address and user agent
+     * @return string md5'd hash of both
+     */
     private static function getConnectionID(): string
     {
         return
@@ -60,19 +70,7 @@ class Authentication
     {
         self::init();
 
-        // validate username
-        $uname = trim( $user->getUsername() );
-        if (!preg_match('/^[a-z0-9\-_]{4,32}$/', $uname)) {
-            throw new RegisterException('Username must only consist of lowercase letters, numbers, -, _');
-        }
-        $user->setUsername($uname);
-
-        // validate email
-        $email = trim( $user->getEmail() );
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new RegisterException('Invalid e-mail address');
-        }
-        $user->setEmail($email);
+        // most validation functions handled by User now
 
         // validate user exists
         $existing = Database::$db->prepare('
@@ -82,28 +80,18 @@ class Authentication
                 or email=:email
         ');
         $existing->execute([
-            'username' => $uname,
-            'email' => $email
+            'username' => $user->getUsername(),
+            'email' => $user->getEmail()
         ]);
         if (!empty($existing->fetch())) {
             throw new RegisterException('User already exists');
         }
 
-        // validate full name
+        // sanitize full name
         $fname = trim( $user->getFullName() );
         $user->setFullName( Util::sanitize($fname) );
 
-        // skip password validation
-
-        // validate url if any
-        $url = trim( $user->getURL() );
-        if (!empty($url)) {
-            if (!filter_var($url, FILTER_VALIDATE_URL)) {
-                throw new RegisterException('Invalid URL?');
-            }
-        }
-
-        // end validation; do something here
+        // end validation, commit to database
         return $user->commitToDatabase();
     }
 
@@ -138,7 +126,7 @@ class Authentication
      * @throws InvalidParameterException
      * @throws MissingParametersException
      */
-    public static function signInUser(string $username_or_email, string $password): User
+    public static function signInUser(string|null $username_or_email, string|null $password): User
     {
         self::init();
 

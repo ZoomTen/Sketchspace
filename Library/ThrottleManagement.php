@@ -122,7 +122,7 @@ class ThrottleManagement {
                 ? (int) self::$buckets[$key]['lastRefreshed']
                 : $now;
 
-        // Add tokens accoding to the calculated fill rate
+        // Add tokens according to the calculated fill rate
         $seconds_from_last_refill = (int) max(0, $last_refilled-$now);
         $tokens_to_add = (int) ($seconds_from_last_refill * $fill_rate);
 

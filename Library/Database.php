@@ -69,7 +69,7 @@ class Database
         };
 
         // create users table
-        if (!$tableExists(self::$prefix.User::TABLE_NAME)){
+        if (!$tableExists(self::getTable('User'))){
             self::$db->query('
                 create table '. self::getTable('User') . ' (
                     id int primary key auto_increment,
@@ -85,7 +85,7 @@ class Database
         }
 
         // create submissions table
-        if (!$tableExists(self::$prefix . Submission::TABLE_NAME )){
+        if (!$tableExists(self::getTable('Submission'))){
             self::$db->query('
                 create table '. self::getTable('Submission') . ' (
                     id int primary key auto_increment,
@@ -103,8 +103,8 @@ class Database
                     submission_id int,
                     user_id int,
 
-                    foreign key (submission_id) references '. self::$prefix . Submission::TABLE_NAME .'(id),
-                    foreign key (user_id) references '. self::$prefix . User::TABLE_NAME .'(id)
+                    foreign key (submission_id) references '. self::getTable('Submission') .'(id),
+                    foreign key (user_id) references '. self::getTable('User') .'(id)
                 )
             ');
         }

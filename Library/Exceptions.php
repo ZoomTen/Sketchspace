@@ -8,3 +8,4 @@ class TooManyRequestsException extends Exception {}
 class InvalidParameterException extends Exception {}
 class RegisterException extends Exception{}
 class MissingParametersException extends Exception{}
+class ValidationError extends Exception{}

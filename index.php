@@ -12,6 +12,7 @@ if (session_status() == PHP_SESSION_ACTIVE) {
 const SKETCHSPACE_DATE_FMT = 'M-j-Y';
 const SKETCHSPACE_TIME_FMT = 'H:i:s';
 const SKETCHSPACE_DATETIME_FMT = 'M-j-Y, H:i:s';
+const SKETCHSPACE_USERNAME_REGEX = '/^[a-z0-9\-_]{4,32}$/';
 
 // use libraries
 require_once 'Library/Util.php';

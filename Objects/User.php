@@ -6,6 +6,7 @@ use DateTime;
 use PDO;
 use PDOStatement;
 use PDOException;
+use Sketchspace\Exception\ValidationError;
 use Sketchspace\Library\Database;
 use Sketchspace\Object\BasicObject;
 /**
@@ -22,7 +23,7 @@ class User implements BasicObject
     private int $joined;
     private string $full_name;
     private string $email;
-    private string $url;
+    private string $url = '';
 
     private bool $in_sync = false;
 
@@ -154,9 +155,12 @@ class User implements BasicObject
 
     public function setUsername(string $username): void
     {
-        // TODO: username validation functions here
-        $this->in_sync = false;
-        $this->username = $username;
+        if (preg_match(SKETCHSPACE_USERNAME_REGEX, $username)) {
+            $this->in_sync = false;
+            $this->username = $username;
+            return;
+        }
+        throw new ValidationError('Username must only consist of lowercase letters, numbers, -, _ between 4 and 32 characters long.');
     }
 
     public function getUsername(): string
@@ -166,6 +170,7 @@ class User implements BasicObject
 
     public function setFullName(string $name): void
     {
+        $name = trim($name);
         $this->in_sync = false;
         $this->full_name = $name;
     }
@@ -177,9 +182,13 @@ class User implements BasicObject
 
     public function setEmail(string $email): void
     {
-        // TODO: email validation here
-        $this->in_sync = false;
-        $this->email = $email;
+        $email = trim($email);
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->in_sync = false;
+            $this->email = $email;
+            return;
+        }
+        throw new ValidationError('Invalid e-mail address');
     }
 
     public function getEmail(): string
@@ -189,9 +198,14 @@ class User implements BasicObject
 
     public function setURL(string $url): void
     {
-        // TODO: url validation here
-        $this->in_sync = false;
-        $this->url = $url;
+        $url = trim($url);
+        if (empty($url)) return;
+        if (filter_var($url, FILTER_VALIDATE_URL)) {
+            $this->in_sync = false;
+            $this->url = $url;
+            return;
+        }
+        throw new ValidationError('Invalid URL?');
     }
 
     public function getURL(): string
@@ -206,8 +220,12 @@ class User implements BasicObject
         // If this is a valid password that is already hashed
             $this->password = $hash;
         } else {
-        // otherwise set EMPTY password
-            $this->password = password_hash('', 0);
+        // otherwise error out
+            throw new ValidationError('Invalid password');
+        }
+
+        if (password_verify('', $hash)) {
+            throw new ValidationError('Password cannot be empty');
         }
     }
 
