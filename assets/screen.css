@@ -263,7 +263,7 @@ button {
   border: 3px outset black;
   box-shadow: 0 0 0 1px black;
   border-radius: 3px;
-  font-size: .7em;
+  font-size: 1em;
 }
 
 #menu-login fieldset {
@@ -301,8 +301,8 @@ button {
     margin: .25em;
   }
   #content-container {
-    grid-template-columns: 1fr;
-    grid-template-rows: 20% 1fr 20%;
+    grid-template-columns: initial;
+    grid-template-rows: initial;
   }
   #nav-sidebar, #featured-sidebar {
     display: flex;
