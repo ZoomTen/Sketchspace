@@ -5,6 +5,7 @@ namespace Sketchspace\Object;
 use PDO;
 use PDOStatement;
 use PDOException;
+use DateTime;
 use Sketchspace\Library\Database;
 use Sketchspace\Enum\Queries;
 use Sketchspace\Object\BasicObject;
@@ -21,7 +22,7 @@ class Submission implements BasicObject
 
     private int $id;
     public string $subject;
-    public string $description;
+    public string|null $description;
 
     /**
      * Corresponds to <Prefix>_submissions.add_timestamp
@@ -65,6 +66,11 @@ class Submission implements BasicObject
     public function getId(): int
     {
         return $this->id;
+    }
+
+    public function getAddedTimestamp(): DateTime
+    {
+        return DateTime::createFromFormat( 'U', strval($this->added) );
     }
 
     public function isObjectInSync(): bool

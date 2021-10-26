@@ -1,0 +1,55 @@
+{% extends Views/_layout.html %}
+
+{% block title %}Sketchspace{% endblock %}
+
+{% block mainContent %}
+<section class="boxing">
+    <div class="submission-heading">
+        <h2>Title here</h2>
+        <time datetime="2000-01-01">{{{ $date_added->format(SKETCHSPACE_DATETIME_FMT) }}}</time>
+    </div>
+
+    <div id="submission-info">
+        <div id="submission-image">
+            <img src="/assets/287.jpg">
+        </div>
+        <div id="submission-description">
+            <h3>Description</h3>
+            <p>This doesn't make sense.</p>
+        </div>
+        <div id="submission-stats">
+            <h3>Details</h3>
+            <ul>
+                <li>Author: User</li>
+                <li>Category: Thing</li>
+                <li>Section: XXX</li>
+                <li>Size: 1366x768</li>
+                <li>Views:
+                    <ul>
+                        <li>Overall: 999999</li>
+                        <li>Today: 2</li>
+                    </ul>
+                </li>
+                <li>Downloads:
+                    <ul>
+                        <li>Overall: 999999</li>
+                        <li>Today: 2</li>
+                    </ul>
+                </li>
+                <li>Comments: 0</li>
+            </ul>
+        </div>
+    </div>
+    <hr>
+    <div class="submission-footer">
+        Something
+    </div>
+
+</section>
+
+<h2 class="header-alone">Comments</h2>
+
+<div class="boxing">
+    Hello
+</div>
+{% endblock %}
