@@ -295,7 +295,9 @@ button {
   max-width: 80%;
   margin: auto;
 }
-@media screen and (max-width: 50em){
+
+
+@media screen and (max-width: 64em){
   .page-container {
     max-width: 100%;
     margin: .25em;
