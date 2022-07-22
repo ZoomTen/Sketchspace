@@ -85,7 +85,7 @@ class Template {
 	}
 
 	static function compileEscapedEchos($code) {
-		return preg_replace('~\{{{\s*(.+?)\s*\}}}~is', '<?php echo htmlentities($1, ENT_QUOTES, \'UTF-8\') ?>', $code);
+		return preg_replace('~\{{{\s*(.+?)\s*\}}}~is', '<?php if (!empty($1)) echo htmlentities($1, ENT_QUOTES, \'UTF-8\'); ?>', $code);
 	}
 
 	static function compileBlock($code) {
