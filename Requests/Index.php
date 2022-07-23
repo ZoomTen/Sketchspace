@@ -4,6 +4,9 @@ use Sketchspace\Library\Authentication;
 use Steampixel\Route;
 use CodeShack\Template;
 
+/**
+ * Main web page route
+ */
 Route::add('/', function()
 {
     Template::view('Views/index.html', [

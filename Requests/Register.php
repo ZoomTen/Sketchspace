@@ -11,10 +11,21 @@ use Sketchspace\Exception\TooManyRequestsException;
 
 use Sketchspace\Object\User;
 
+/**
+ * Register
+ * This page checks for the following fields:
+ * u = username
+ * fn = full name
+ * e = email
+ * pw = password
+ * cpw = confirm password (should be same as `pw`)
+ * w = url [optional]
+ * anticsrf = obvious
+ */
 Route::add('/register', function()
 {
     $messages = [];
-    
+
     $username = null;
     $full_name = null;
     $email = null;
@@ -114,19 +125,20 @@ Route::add('/register', function()
     if ($succeeded) {
         Template::view('Views/_layout.html',[
             'logged_in_user' => Authentication::getCurrentUser(),
+            'hide_login_form' => true,
             'messages' => $messages
         ]);
     } else {
         $_SESSION['acsrf'] = bin2hex(random_bytes(32));
         Template::view('Views/register.html',[
             'logged_in_user' => Authentication::getCurrentUser(),
+            'hide_login_form' => true,
             'messages' => $messages,
             'form_save' => [
                 'u'  => $username,
                 'fn' => $full_name,
                 'e'  => $email
             ],
-            'hide_login_form' => true,
             'acsrf' => $_SESSION['acsrf']
         ]);
     }

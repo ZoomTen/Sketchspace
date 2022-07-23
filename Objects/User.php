@@ -17,7 +17,7 @@ class User implements BasicObject
     public const TABLE_NAME = '_users';
 
     private int $id;
-    
+
     private string $username;
     private string $password;
     private int $joined;
@@ -27,6 +27,26 @@ class User implements BasicObject
 
     private bool $in_sync = false;
 
+    public static function initTables(): int
+    {
+      // create users table
+      if (!Database::tableExists(Database::getTable('User'))){
+          Database::$db->query('
+              create table '. Database::getTable('User') . ' (
+                  id int primary key auto_increment,
+                  username varchar(32) unique not null,
+                  password varchar(255) not null,
+                  join_timestamp int default 0,
+                  full_name varchar(64) not null,
+                  email varchar(64) not null unique,
+                  url varchar(64),
+                  last_login int default null
+              )
+          ');
+          return self::INITIALIZED;
+      }
+      return self::NOT_MODIFIED;
+    }
     /**
      * Create a User from scratch
      *
@@ -54,6 +74,18 @@ class User implements BasicObject
         $user->markJoinDate();
 
         return $user;
+    }
+
+    public static function fromId(int $id): User|bool
+    {
+        $q = Database::$db->prepare('
+            select * from '.Database::getTable('User').'
+            where id = :id
+        ');
+
+        $q->execute(['id'=>$id]);
+
+        return User::fromStatement($q);
     }
 
     public static function fromStatement(PDOStatement $statement): User|bool
@@ -170,9 +202,8 @@ class User implements BasicObject
 
     public function setFullName(string $name): void
     {
-        $name = trim($name);
         $this->in_sync = false;
-        $this->full_name = $name;
+        $this->full_name = trim($name);
     }
 
     public function getFullName(): string

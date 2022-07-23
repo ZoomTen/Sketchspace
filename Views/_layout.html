@@ -9,7 +9,7 @@
 	</head>
 	<body>
 		<div class="page-container">
-			<div id="top-bar">
+			<header id="top-bar">
 				<h1>SketchSpace</h1>
 				<nav id="main-menu">
 					<ul>
@@ -19,6 +19,7 @@
 						<li>Contact</li>
 					</ul>
 				</nav>
+				{% if (!$hide_login_form): %}
 				{% if (isset($logged_in_user)): %}
 				<ul id="user-brief" class="horizontal-menu">
 					<li>
@@ -31,7 +32,7 @@
 						Edit my profile
 					</li>
 					<li>
-						Add a submission
+						<a href="/submit">Add a submission</a>
 					</li>
 					<li>
 						User preferences
@@ -45,53 +46,62 @@
 					<fieldset>
 						<div class="form-row">
 							<label for="login_uname">Username</label>
-							<input type="text" name="u" id="login_uname"/>
+							<input type="text" name="u" id="login_uname" required/>
 						</div>
 						<div class="form-row">
 							<label for="login_pw">Password</label>
-							<input type="password" name="p" id="login_pw"/>
+							<input type="password" name="p" id="login_pw" required/>
 						</div>
 						<button>Login</button>
 					</fieldset>
 				</form>
 				{% endif; %}
-			</div>
+				{% endif; %}
+			</header>
 
 			<div id="content-container">
 				<div id="nav-sidebar">
-					<aside class="boxing">
-						<h2>Search</h2>
-						<form id="search-form">
+					<section class="boxing">
+						<header>
+							<h2>Search</h2>
+						</header>
+						<form action="/search" id="search-form">
 							<fieldset>
 								<label for="search_q">Find</label>
 								<input type="text" name="q" id="search_q"/>
 								<button>Search</button>
 							</fieldset>
 						</form>
-					</aside>
+					</section>
 
-					<aside class="boxing">
-						<h2>Submissions</h2>
+					<section class="boxing">
+						<header>
+							<h2>Submissions</h2>
+						</header>
 						<ul>
 							<li>Latest</li>
 							<li>All</li>
 						</ul>
-					</aside>
+					</section>
 
-					<aside class="boxing">
-						<h2>Miscellaneous</h2>
+					<section class="boxing">
+						<header>
+							<h2>Miscellaneous</h2>
+						</header>
 						<ul>
 							<li>Change log</li>
 							<li>88x31 buttons</li>
 						</ul>
-					</aside>
+					</section>
 
-					<aside class="boxing">
-						<h2>Community</h2>
+					<section class="boxing">
+						<header>
+							<h2>Community</h2>
+						</header>
 						<ul>
 							<li><a href="/users">User list</a></li>
 						</ul>
-					</aside>
+					</section>
 				</div>
 				<main>
 					{% if (!empty($messages)): %}
@@ -105,37 +115,47 @@
 					{% yield mainContent %}
 				</main>
 				<div id="featured-sidebar">
-					<aside class="boxing">
-						<h2>The Fun Stuff!</h2>
+					<section class="boxing">
+						<header>
+							<h2>The Fun Stuff!</h2>
+						</header>
 						{% yield siteUpdates %}
-					</aside>
+					</section>
 
-					<aside class="boxing">
-						<h2>Partners</h2>
+					<section class="boxing">
+						<header>
+							<h2>Partners</h2>
+						</header>
 						<ul>
 							<li>A</li>
 							<li>B</li>
 						</ul>
-					</aside>
+					</section>
 
-					<aside class="boxing">
-						<h2>Featured Submission</h2>
+					<section class="boxing">
+						<header>
+							<h2>Featured Submission</h2>
+						</header>
 						{% yield subOfTheWeek %}
-					</aside>
+					</section>
 
-					<aside class="boxing">
-						<h2>Appreciation Station</h2>
+					<section class="boxing">
+						<header>
+							<h2>Appreciation Station</h2>
+						</header>
 						{% yield kindWords %}
-					</aside>
+					</section>
 				</div>
 			</div>
 
 			<footer>
 				<hr>
-				<span>&copy; ZoomTen 2021.</span>
+				<span>&copy; ZoomTen 2021-2022.</span>
 				<br>
 				<span><a href="https://github.com/ZoomTen/Sketchspace">View the source code here</a></span>
 			</footer>
 		</div>
+		{% yield modalDialogs %}
+		{% yield additionalScripts %}
 	</body>
 </html>

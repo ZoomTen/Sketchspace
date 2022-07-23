@@ -4,6 +4,8 @@ namespace Sketchspace\Library;
 
 /**
  * Various functions to assist in other functions.
+ *
+ * This does not depend on anything else.
  */
 class Util
 {
@@ -73,4 +75,22 @@ class Util
         }
         return $formatted_headers;
     }
+    
+    /**
+     * Generate a random alphanumeric string
+     * 
+     * @param int $length
+     * @return string|mixed
+     */
+    public static function generateRandomString(int $length) {
+        $key = '';
+        $keys = array_merge(range(0, 9), range('a', 'z'));
+        
+        for ($i = 0; $i < $length; $i++) {
+            $key .= $keys[array_rand($keys)];
+        }
+        
+        return $key;
+    }
+    
 }

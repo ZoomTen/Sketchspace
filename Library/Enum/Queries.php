@@ -10,4 +10,6 @@ namespace Sketchspace\Enum;
 class Queries
 {
     public const R_SUBMISSION_USER = '_submission_users';
+    public const R_SUBMISSION_SUBCATEGORY = '_submission_subcategories';
+    public const R_SUBCATEGORY_PARENT = '_subcategory_parents';
 }

@@ -59,54 +59,10 @@ class Database
     }
 
     /**
-     * Sets up the necessary tables
+     * Check if a table exists
      */
-    public static function setupAllTables(): void
+    public static function tableExists(string $table): int
     {
-        // setup table checking function
-        $tableExists = function(string $table){
-            return self::$db->query("show tables like '{$table}'")->rowcount();
-        };
-
-        // create users table
-        if (!$tableExists(self::getTable('User'))){
-            self::$db->query('
-                create table '. self::getTable('User') . ' (
-                    id int primary key auto_increment,
-                    username varchar(32) unique not null,
-                    password varchar(255) not null,
-                    join_timestamp int default 0,
-                    full_name varchar(64) not null,
-                    email varchar(64) not null unique,
-                    url varchar(64),
-                    last_login int default null
-                )
-            ');
-        }
-
-        // create submissions table
-        if (!$tableExists(self::getTable('Submission'))){
-            self::$db->query('
-                create table '. self::getTable('Submission') . ' (
-                    id int primary key auto_increment,
-                    subject varchar(80) not null,
-                    description text,
-                    add_timestamp int default 0
-                )
-            ');
-        }
-
-        // create relations table
-        if (!$tableExists(self::$prefix . Queries::R_SUBMISSION_USER)){
-            self::$db->query('
-                create table '. self::$prefix . Queries::R_SUBMISSION_USER . ' (
-                    submission_id int,
-                    user_id int,
-
-                    foreign key (submission_id) references '. self::getTable('Submission') .'(id),
-                    foreign key (user_id) references '. self::getTable('User') .'(id)
-                )
-            ');
-        }
+       return self::$db->query("show tables like '{$table}'")->rowcount();
     }
 }

@@ -3,47 +3,53 @@
 {% block title %}Sketchspace{% endblock %}
 
 {% block mainContent %}
-<section class="boxing">
-    <div class="submission-heading">
-        <h2>Title here</h2>
-        <time datetime="2000-01-01">{{{ $date_added->format(SKETCHSPACE_DATETIME_FMT) }}}</time>
-    </div>
+{% $name = $submission->getSubject() %}
+{% $date = $submission->getAddedTimestamp()->format(SKETCHSPACE_DATETIME_FMT) %}
+{% $desc = $submission->getDescription() %}
+{% $user = $submission->getAssociatedUser() %}
+{% $subc = $submission->getSubcategory() %}
+{% $catg = $subc->isChildOf() %}
+<section class="boxing" id="submission">
+    <header>
+        <h2>{{{ $name }}}</h2>
+        <time datetime="2000-01-01">{{{ $date }}}</time>
+    </header>
 
     <div id="submission-info">
-        <div id="submission-image">
-            <img src="/assets/287.jpg">
-        </div>
+        <img loading="lazy" id="submission-image" src="/{{{ $submission->getFilename() }}}">
         <div id="submission-description">
             <h3>Description</h3>
-            <p>This doesn't make sense.</p>
+            <p>{{{ $desc }}}</p>
         </div>
         <div id="submission-stats">
             <h3>Details</h3>
             <ul>
-                <li>Author: User</li>
-                <li>Category: Thing</li>
-                <li>Section: XXX</li>
-                <li>Size: 1366x768</li>
-                <li>Views:
+                <li><span>Author:</span> <a href="/user/{{{ $user->getUsername() }}}">{{{ $user->getUsername() }}}</a></li>
+                <li><span>Category:</span> <a href="/category/{{{ $catg->getId() }}}">{{{ $catg->name }}}</a></li>
+                <li><span>Section:</span> <a href="/subcategory/{{{ $subc->getId() }}}">{{{ $subc->name }}}</a></li>
+                <li><span>Views:</span>
                     <ul>
-                        <li>Overall: 999999</li>
-                        <li>Today: 2</li>
+                        <li><span>Overall:</span> 999999</li>
+                        <li><span>Today:</span> 2</li>
                     </ul>
                 </li>
-                <li>Downloads:
+                <li><span>Downloads:</span>
                     <ul>
-                        <li>Overall: 999999</li>
-                        <li>Today: 2</li>
+                        <li><span>Overall:</span> 999999</li>
+                        <li><span>Today:</span> 2</li>
                     </ul>
                 </li>
-                <li>Comments: 0</li>
+                <li><span>Comments:</span> 0</li>
             </ul>
         </div>
     </div>
     <hr>
-    <div class="submission-footer">
-        Something
-    </div>
+    <footer>
+        <ul id="submission-actions">
+          <li><a href="#">Download Submission</a></li>
+          <li><a href="#">Full View</a></li>
+        </ul>
+    </footer>
 
 </section>
 

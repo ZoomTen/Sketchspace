@@ -6,18 +6,22 @@
 {% $join_date = $display_user->formatJoinDate(SKETCHSPACE_DATE_FMT) %}
 {% $url = $display_user->getUrl() %}
 	<hr>
-	<section class="boxing">
-		<h2>{{{ $username }}}'s Links</h2>
+	<article class="boxing">
+		<header>
+			<h2>{{{ $username }}}'s Links</h2>
+		</header>
 		<ul class="horizontal-menu">
-			<li>Submissions</li>
-			<li>Favorites</li>
-			<li>Journal</li>
-			<li>Comments</li>
+			<li><a href="#">Submissions</a></li>
+			<li><a href="#">Favorites</a></li>
+			<li><a href="#">Journal</a></li>
+			<li><a href="#">Comments</a></li>
 		</ul>
-	</section>
+	</article>
 
-	<section class="boxing">
-		<h2>About {{{ $username }}}</h2>
+	<article class="boxing">
+		<header>
+			<h2>About {{{ $username }}}</h2>
+		</header>
 		<ul>
 			<li><b>Full name</b>: {{{ $full_name }}}</li>
 			<li><b>Joined</b>: {{{ $join_date }}}</li>
@@ -30,10 +34,12 @@
 			<li><b>Comments made</b>: 9999</li>
 			<li><b>Comments received</b>: 9999</li>
 		</ul>
-	</section>
+	</article>
 
-	<section class="boxing">
-		<h2>{{{ $username }}}'s Submissions</h2>
+	<article class="boxing">
+		<header>
+			<h2>{{{ $username }}}'s Submissions</h2>
+		</header>
 		<div class="table-wrapper">
 			<table id="submission-table">
 				<thead>
@@ -56,10 +62,12 @@
 				</tbody>
 			</table>
 		</div>
-	</section>
+	</article>
 
-	<section class="boxing">
-		<h2>{{{ $username }}}'s Journal</h2>
+	<article class="boxing">
+		<header>
+			<h2>{{{ $username }}}'s Journal</h2>
+		</header>
 		<h3>Blue</h3>
 		<ul>
 			<li>Date: Jan 02, 2001, 00:50:00</li>
@@ -68,31 +76,35 @@
 		<p>
 			According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible. Yellow, black. Yellow, black. Yellow, black. Yellow, black. Ooh, black and yellow! Let's shake it up a little. Barry! Breakfast is ready! Coming! Hang on a second. Hello? - Barry? - Adam? - Can you believe this is happening? - I can't. I'll pick you up. Looking sharp. Use the stairs. Your father paid good money for those. Sorry. I'm excited. Here's the graduate. We're very proud of you, son. A perfect report card, all B's. Very proud. Ma! I got a thing going here. - You got lint on your fuzz. - Ow! That's me! - Wave to us! We'll be in row 118,000. - Bye!
 		</p>
-	</section>
+	</article>
 
 	<h2 class="header-alone">Guestbook</h2>
 
-	<div class="boxing">
-		<ul>
-			<li>User: snark</li>
-			<li>Date: Jan 02, 2001, 00:50:00</li>
-		</ul>
+	<article class="boxing">
+		<header>
+			<ul>
+				<li>User: snark</li>
+				<li>Date: Jan 02, 2001, 00:50:00</li>
+			</ul>
+		</header>
 		<p>
 			According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible. Yellow, black. Yellow, black. Yellow, black. Yellow, black. Ooh, black and yellow! Let's shake it up a little. Barry! Breakfast is ready! Coming! Hang on a second. Hello? - Barry? - Adam? - Can you believe this is happening? - I can't. I'll pick you up. Looking sharp. Use the stairs. Your father paid good money for those. Sorry. I'm excited. Here's the graduate. We're very proud of you, son. A perfect report card, all B's. Very proud. Ma! I got a thing going here. - You got lint on your fuzz. - Ow! That's me! - Wave to us! We'll be in row 118,000. - Bye!
 		</p>
-	</div>
+	</article>
 
 	<hr>
 
-	<div class="boxing">
-		<ul>
-			<li>User: snark</li>
-			<li>Date: Jan 02, 2001, 00:50:00</li>
-		</ul>
+	<article class="boxing">
+		<header>
+			<ul>
+				<li>User: snark</li>
+				<li>Date: Jan 02, 2001, 00:50:00</li>
+			</ul>
+		</header>
 		<p>
 			According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible. Yellow, black. Yellow, black. Yellow, black. Yellow, black. Ooh, black and yellow! Let's shake it up a little. Barry! Breakfast is ready! Coming! Hang on a second. Hello? - Barry? - Adam? - Can you believe this is happening? - I can't. I'll pick you up. Looking sharp. Use the stairs. Your father paid good money for those. Sorry. I'm excited. Here's the graduate. We're very proud of you, son. A perfect report card, all B's. Very proud. Ma! I got a thing going here. - You got lint on your fuzz. - Ow! That's me! - Wave to us! We'll be in row 118,000. - Bye!
 		</p>
-	</div>
+	</article>
 
 	<hr>
 

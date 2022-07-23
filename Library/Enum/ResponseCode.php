@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Sketchspace\Library;
+namespace Sketchspace\Enum;
 
 /**
  * Constants for HTTP response codes
@@ -18,6 +18,7 @@ class ResponseCode {
     public const UNAUTHORIZED = 401;
     public const NOT_FOUND = 404;
     public const METHOD_NOT_ALLOWED = 405;
+    public const TOO_MANY_REQUESTS = 429;
 
     public const SERVER_ERROR = 500;
 }

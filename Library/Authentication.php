@@ -141,6 +141,7 @@ class Authentication
             75                                      // 75 maximum
         );
 
+        // check empty parameters
         if (empty($username_or_email)) {
             throw new MissingParametersException('Username or e-mail required');
         }
@@ -149,6 +150,7 @@ class Authentication
             throw new MissingParametersException('Password required');
         }
 
+        // try to get user
         $q = Database::$db->prepare('
             select * from '.Database::getTable('User').'
             where email=? or username=?
@@ -156,7 +158,7 @@ class Authentication
         $q->execute([$username_or_email, $username_or_email]);
         $u = User::fromStatement($q);
 
-        // if we STILL don't have a user, call it quits
+        // if we don't have a user, call it quits
         if (empty($u)) {
             throw new InvalidParameterException(
                 "Invalid username or password" // vagueness reduces attack vectors

@@ -3,3 +3,10 @@
 /.sessions.json
 /.throttle.json
 /phpdoc.phar
+/.buildpath
+/.project
+/assets/submissions/*.jpg
+/assets/submissions/*.png
+/assets/submissions/*.bmp
+/assets/submissions/*.gif
+/assets/thumbs/*.jpg

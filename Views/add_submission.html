@@ -1,0 +1,88 @@
+{% extends Views/_layout.html %}
+
+{% block title %}Sketchspace{% endblock %}
+
+{% block mainContent %}
+<div class="boxing">
+	<header>
+		<h2>Submit something!</h2>
+	</header>
+	<form method="post" class="standard-form" enctype="multipart/form-data">
+		<fieldset>
+			<legend>Basic information</legend>
+			<br>
+			<img id="subadd-preview" height="200" src="/assets/PlaceholderforArt.png">
+			<br>
+			<label for="subadd-fname">Which file?</label>
+			<input type="file" name="f" id="subadd-fname" required>
+			<br>
+			<label for="subadd-uname">Title</label>
+			<input type="text" name="t" id="subadd-uname" value="{{{ $form_save['t'] }}}" required>
+			<br>
+			<label for="subadd-category">Category</label>
+			<select id="subadd-category" name="cat" required>
+				<option disabled selected>Select a category...</option>
+				{% foreach ($categories as $category => $values): %}
+				<optgroup label="{{{ $category }}}">
+						{% foreach ($values as $subcategory): %}
+						<option value="{{{ $subcategory->getId() }}}" {% if ( (string)$subcategory->getId() == $form_save['cat'] ): %}selected{% endif; %}>{{{ $subcategory->name }}}</option>
+						{% endforeach; %}
+				</optgroup>
+				{% endforeach; %}
+			</select>
+			<label for="subadd-comments">Artist's Comments (plain text only)</label>
+			<textarea name="d" id="subadd-comments" columns="80" rows="6">{{{ $form_save['d'] }}}</textarea>
+		</fieldset>
+		<fieldset>
+			<legend>Additional information</legend>
+			<label for="subadd-keyword">Keywords</label>
+			<input type="text" name="kw" placeholder="use spaces between words use_spaces_for_phrases" value="{{{ $form_save['kw'] }}}" id="subadd-pw">
+		</fieldset>
+		<fieldset>
+			<input type="hidden" name="anticsrf" value="{{{ $acsrf }}}">
+			<button>Submit</button>
+		</fieldset>
+	</form>
+</div>
+{% endblock %}
+
+{% block modalDialogs %}
+	<div class="modal-dialog" id="supported-filetypes">
+		<a href="#" class="modal-close" hidden aria-hidden="true"></a>
+		<div>
+			<header>
+				<h2>Upload Warning</h2>
+				<a href="#" class="modal-close" hidden aria-hidden="true"></a>
+			</header>
+			<div>
+				<p>
+					Supported filetypes are: png, jp(e)g, gif, bmp.
+				</p>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block additionalScripts %}
+	<script>
+		(function(w, d){
+			d.getElementById("subadd-fname").addEventListener("change", function(){
+				switch(this.files[0].type) {
+						case "image/png":
+						case "image/jpeg":
+						case "image/gif":
+						case "image/bmp":
+							var read = new FileReader();
+							read.addEventListener("load", function(e){
+								d.getElementById("subadd-preview").src = e.target.result;
+							});
+							read.readAsDataURL(this.files[0]);
+							break;
+						default:
+							location.hash = "#supported-filetypes";
+							break;
+				}
+			});
+		})(window, document);
+	</script>
+{% endblock %}

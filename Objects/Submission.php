@@ -7,8 +7,10 @@ use PDOStatement;
 use PDOException;
 use DateTime;
 use Sketchspace\Library\Database;
+use Sketchspace\Library\Util;
 use Sketchspace\Enum\Queries;
 use Sketchspace\Object\BasicObject;
+use Sketchspace\Exception\SubmissionException;
 
 // external objects
 require_once 'Objects/User.php';
@@ -21,8 +23,11 @@ class Submission implements BasicObject
     public const TABLE_NAME = '_submissions';
 
     private int $id;
-    public string $subject;
-    public string|null $description;
+    private string $subject;
+    private string|null $description = null;
+    
+    public string|null $file = null;
+    public string|null $thumbnail = null;
 
     /**
      * Corresponds to <Prefix>_submissions.add_timestamp
@@ -31,18 +36,91 @@ class Submission implements BasicObject
 
     private bool $in_sync = false;
 
+    public static function initTables(): int
+    {
+      $tables_init = 0;
+
+      // create submissions table
+      if (!Database::tableExists(Database::getTable('Submission'))){
+          Database::$db->query('
+              create table '. Database::getTable('Submission') . ' (
+                  id int primary key auto_increment,
+                  subject varchar(80) not null,
+                  description text,
+                  file text not null,
+                  thumbnail text,
+                  add_timestamp int default 0
+              )
+          ');
+          $tables_init += 1;
+      }
+
+      // create relations table
+      if (!Database::tableExists(Database::$prefix . Queries::R_SUBMISSION_USER)){
+          Database::$db->query('
+              create table '. Database::$prefix . Queries::R_SUBMISSION_USER . ' (
+                  submission_id int,
+                  user_id int,
+
+                  foreign key (submission_id) references '. Database::getTable('Submission') .'(id),
+                  foreign key (user_id) references '. Database::getTable('User') .'(id)
+              )
+          ');
+          $tables_init += 1;
+      }
+
+      if (!Database::tableExists(Database::$prefix . Queries::R_SUBMISSION_SUBCATEGORY)){
+          Database::$db->query('
+              create table '. Database::$prefix . Queries::R_SUBMISSION_SUBCATEGORY . ' (
+                  submission_id int,
+                  subcategory_id int,
+
+                  foreign key (submission_id) references '. Database::getTable('Submission') .'(id),
+                  foreign key (subcategory_id) references '. Database::getTable('Subcategory') .'(id)
+              )
+          ');
+          $tables_init += 1;
+      }
+
+      if ($tables_init > 0) {
+          return self::INITIALIZED;
+      }
+
+      return self::NOT_MODIFIED;
+    }
+
     /**
      * Create a Submission from scratch
+     *
+     * @param string $subject
+     * @param string|null $description
+     * @param string $filename
+     * @param string $thumbnail
+     * @return Submission
      */
-    public static function newSubmission(string $subject, string $description = ''): Submission
+    public static function newSubmission(string $subject, string $filename, string $thumbnail, string $description = null): Submission
     {
-        $user = new Submission();
+        $submission = new Submission();
 
-        $user->subject = $subject;
-        $user->description = $description;
-        $user->markAddDate();
+        $submission->setSubject($subject);
+        $submission->setDescription($description);
+        $submission->setFilename($filename);
+        $submission->setThumbnailLocation($thumbnail);
+        $submission->markAddDate();
 
-        return $user;
+        return $submission;
+    }
+
+    public static function fromId(int $id): Submission|bool
+    {
+        $q = Database::$db->prepare('
+            select * from '.Database::getTable('Submission').'
+            where id = :id
+        ');
+
+        $q->execute(['id'=>$id]);
+
+        return Submission::fromStatement($q);
     }
 
     public static function fromStatement(PDOStatement $statement): Submission|bool
@@ -101,7 +179,12 @@ class Submission implements BasicObject
          * If we don't have an ID yet (no equiv. in database)
          * then bail out
          */
-        if (!isset($this->id)) return;
+        if (!isset($this->id)){
+            throw new SubmissionException('Submission not in database?');;
+        }
+        if (!$user->getId()){
+            throw new SubmissionException('User not in database?');;
+        }
 
         $q = Database::$db->prepare('
             select * from '.Database::$prefix.Queries::R_SUBMISSION_USER.'
@@ -136,6 +219,56 @@ class Submission implements BasicObject
 
     /**
      * [Database]
+     * Link a submission to a subcategory.
+     *
+     * @param Subcategory $subcat
+     */
+    public function attachToSubcategory(Subcategory $subcat): void
+    {
+        /**
+         * If we don't have an ID yet (no equiv. in database)
+         * then bail out
+         */
+        if (!isset($this->id)){
+            throw new SubmissionException('Submission not in database?');
+        }
+        if (!$subcat->getId()){
+            throw new SubmissionException('Subcategory not in database?');
+        }
+
+        $q = Database::$db->prepare('
+            select * from '.Database::$prefix.Queries::R_SUBMISSION_SUBCATEGORY.'
+            where submission_id=:id
+        ');
+
+        $q->execute(['id' => $this->id]);
+
+        $result = $q->fetch();
+
+        if ($result) {
+            $q = Database::$db->prepare('
+                update '.Database::$prefix.Queries::R_SUBMISSION_SUBCATEGORY.'
+                set
+                    subcategory_id = :subcategory_id
+                where
+                    submission_id = :submission_id
+            ');
+        } else {
+            $q = Database::$db->prepare('
+                insert into '.Database::$prefix.Queries::R_SUBMISSION_SUBCATEGORY.'
+                (submission_id, subcategory_id)
+                values
+                    (:submission_id, :subcategory_id)
+            ');
+        }
+        $q->execute([
+            'submission_id' => $this->id,
+            'subcategory_id' => $subcat->getId()
+        ]);
+    }
+
+    /**
+     * [Database]
      * @return User|bool [description]
      */
     public function getAssociatedUser(): User|bool
@@ -157,6 +290,31 @@ class Submission implements BasicObject
 
             return User::fromStatement($q);
         }
+    }
+
+    /**
+     * [Database]
+     * @return Subcategory|bool
+     */
+    public function getSubcategory()
+    {
+        $q = Database::$db->prepare('
+           select * from '.Database::$prefix.Queries::R_SUBMISSION_SUBCATEGORY.'
+           where submission_id = :id
+        ');
+        $q->execute(['id' => $this->id]);
+
+        $result = $q->fetch();
+
+        if ($result) {
+            $q = Database::$db->prepare('
+               select * from '.Database::getTable('Subcategory').'
+               where id = :id
+            ');
+            $q->execute(['id' => $result['subcategory_id']]);
+
+            return Subcategory::fromStatement($q);
+        }
 
         return false;
     }
@@ -167,19 +325,23 @@ class Submission implements BasicObject
          * If the submission already exists in the database
          * simply update it
          */
-        if ($this->id) {
+        if (isset($this->id)) {
             try {
                 $q = Database::$db->prepare('
                     update '.Database::getTable('Submission').'
                     set
                         subject = :subject,
                         description = :description
+                        file = :file,
+                        thumbnail = :thumbnail
                     where
                         id = :id
                 ');
                 $q->execute([
                     'subject' => $this->subject,
                     'description' => $this->description,
+                    'file' => $this->file,
+                    'thumbnail' => $this->thumbnail,
                     'id' => $this->id
                 ]);
 
@@ -198,14 +360,17 @@ class Submission implements BasicObject
 
             $q = Database::$db->prepare('
                 insert into '.Database::getTable('Submission').'
-                (subject, description)
+                (subject, description, file, thumbnail, add_timestamp)
                 values
-                    (:subject, :description)
+                    (:subject, :description, :file, :thumbnail, :add_timestamp)
             ');
 
             $q->execute([
                 'subject' => $this->subject,
-                'description' => $this->description
+                'description' => $this->description,
+                'file' => $this->file,
+                'thumbnail' => $this->thumbnail,
+                'add_timestamp' => $this->added
             ]);
 
             $this->id = (int) Database::$db->lastInsertId();
@@ -214,5 +379,65 @@ class Submission implements BasicObject
         } catch (PDOException $e) {
             return self::FAILED;
         }
+    }
+
+    public function getSubject(): string|null
+    {
+        return $this->subject;
+    }
+
+    public function getDescription(): string|null
+    {
+        return $this->description;
+    }
+    
+    public function getFilename(): string|null
+    {
+        return $this->file;
+    }
+    
+    public function getThumbnailLocation(): string|null
+    {
+        return $this->thumbnail;
+    }
+
+    public function setSubject(string $subject): void
+    {
+        $this->in_sync = false;
+        $this->subject = Util::sanitize(trim($subject));
+    }
+
+    public function setDescription(string $description): void
+    {
+        $this->in_sync = false;
+        $this->description = Util::sanitize(trim($description));
+    }
+    
+    public function setFilename(string $filename): void
+    {
+        if (!is_file($filename)) {
+            throw new SubmissionException('File not found');
+        }
+        $finfo = new \finfo();
+        $image_mime = $finfo->file($filename, FILEINFO_MIME_TYPE);
+        
+        if (!in_array($image_mime, SKETCHSPACE_SUPPORTED_MIMETYPES)) {
+            throw new SubmissionException('Unsupported MIME type');
+        }
+        $this->file = $filename;
+    }
+    
+    public function setThumbnailLocation(string $filename): void
+    {
+        if (!is_file($filename)) {
+            throw new SubmissionException('File not found');
+        }
+        $finfo = new \finfo();
+        $image_mime = $finfo->file($filename, FILEINFO_MIME_TYPE);
+        
+        if ($image_mime != 'image/jpeg') {
+            throw new SubmissionException('Thumbnail is not a JPEG');
+        }
+        $this->thumbnail = $filename;
     }
 }
