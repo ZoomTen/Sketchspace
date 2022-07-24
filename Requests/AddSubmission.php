@@ -66,8 +66,8 @@ Route::add('/submit', function()
                 break;
             }
             $title = $_POST['t'];
-
-            if (!array_key_exists('cat', $_POST) || empty(trim($_POST['cat']))) {
+            
+            if (!Util::presentInArray('cat', $_POST, true)) {
                 array_push($messages, ['error', 'Set a category...']);
                 break;
             }

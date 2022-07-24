@@ -93,4 +93,18 @@ class Util
         return $key;
     }
     
+    /**
+     * Determines if a key is a present in an array and is not empty.
+     * 
+     * @param string $key
+     * @param array $array
+     * @param string $trim Whether or not to trim the contents of the key
+     * @return boolean
+     */
+    public static function presentInArray(string $key, array $array, bool $trim=false): bool {
+        if ($trim) {
+            return array_key_exists($key, $array) && !empty(trim($array[$key]));
+        }
+        return array_key_exists($key, $array) && !empty($array[$key]);
+    }
 }
