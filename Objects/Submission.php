@@ -419,29 +419,33 @@ class Submission implements BasicObject
     
     public function setFilename(string $filename): void
     {
-        if (!is_file($filename)) {
+        $file_in_sys = SKETCHSPACE_UPLOAD_DIR.$filename;
+        
+        if (!is_file($file_in_sys)) {
             throw new SubmissionException('File not found');
         }
         $finfo = new \finfo();
-        $image_mime = $finfo->file($filename, FILEINFO_MIME_TYPE);
+        $image_mime = $finfo->file($file_in_sys, FILEINFO_MIME_TYPE);
         
         if (!in_array($image_mime, SKETCHSPACE_SUPPORTED_MIMETYPES)) {
             throw new SubmissionException('Unsupported MIME type');
         }
-        $this->file = $filename;
+        $this->file = SKETCHSPACE_UPLOAD_URL.$filename;
     }
     
     public function setThumbnailLocation(string $filename): void
     {
-        if (!is_file($filename)) {
+        $file_in_sys = SKETCHSPACE_THUMB_DIR.$filename;
+        
+        if (!is_file($file_in_sys)) {
             throw new SubmissionException('File not found');
         }
         $finfo = new \finfo();
-        $image_mime = $finfo->file($filename, FILEINFO_MIME_TYPE);
+        $image_mime = $finfo->file($file_in_sys, FILEINFO_MIME_TYPE);
         
         if ($image_mime != 'image/jpeg') {
             throw new SubmissionException('Thumbnail is not a JPEG');
         }
-        $this->thumbnail = $filename;
+        $this->thumbnail = SKETCHSPACE_THUMB_URL.$filename;
     }
 }

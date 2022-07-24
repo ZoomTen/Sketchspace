@@ -27,8 +27,13 @@ const SKETCHSPACE_SUPPORTED_MIMETYPES = [
     'image/bmp'
 ];
 
-const SKETCHSPACE_UPLOAD_DIR = 'assets/submissions';
-const SKETCHSPACE_THUMB_DIR  = 'assets/thumbs';
+// actual filesystem locations (relative to root, must end in /)
+const SKETCHSPACE_UPLOAD_DIR = 'public/assets/submissions/';
+const SKETCHSPACE_THUMB_DIR  = 'public/assets/thumbs/';
+
+// URL to access resources (must end in /)
+const SKETCHSPACE_UPLOAD_URL = '/assets/submissions/';
+const SKETCHSPACE_THUMB_URL =  '/assets/thumbs/';
 
 // max login time: 1hr
 const SKETCHSPACE_MAX_LOGIN_TIME = 60 * 60; // seconds

@@ -138,11 +138,11 @@ Route::add('/submit', function()
             
             $name = basename($file['name'], '.'.$ext);
             
-            $orgnl_filename = SKETCHSPACE_UPLOAD_DIR.'/'.$name.'-'.$random.'.'.$ext;
-            $thumb_filename = SKETCHSPACE_THUMB_DIR.'/'.$name.'-'.$random.'.jpg';
+            $orgnl_filename = $name.'-'.$random.'.'.$ext;
+            $thumb_filename = $name.'-'.$random.'.jpg';
             
-            move_uploaded_file($file['tmp_name'], $orgnl_filename);
-            Image::createThumbnail($orgnl_filename, $thumb_filename, 100);
+            move_uploaded_file($file['tmp_name'], SKETCHSPACE_UPLOAD_DIR.$orgnl_filename);
+            Image::createThumbnail(SKETCHSPACE_UPLOAD_DIR.$orgnl_filename, SKETCHSPACE_THUMB_DIR.$thumb_filename, 100);
             
             try {
                 $submission = Submission::newSubmission($title, $orgnl_filename, $thumb_filename, $description);

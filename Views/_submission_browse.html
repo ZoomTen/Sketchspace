@@ -50,7 +50,7 @@
 			{% $owner = $sub->getAssociatedUser()->getUsername(); %}
 			{% $section = $sub->getSubcategory(); %}
 			<li>
-				<a href="/submission/{{{ $sub->getId() }}}"><img loading="lazy" src="/{{{ $sub->getThumbnailLocation() }}}"></a><br>
+				<a href="/submission/{{{ $sub->getId() }}}"><img loading="lazy" src="{{{ $sub->getThumbnailLocation() }}}"></a><br>
 				<div class="_desc">
 					<span class="_title"><a href="/submission/{{{ $sub->getId() }}}">{{{ $sub->getSubject() }}}</a>
 					by <a href="/user/{{{ $owner }}}">{{{ $owner }}}</a></span>
