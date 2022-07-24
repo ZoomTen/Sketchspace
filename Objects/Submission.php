@@ -147,6 +147,11 @@ class Submission implements BasicObject
     {
         return DateTime::createFromFormat( 'U', strval($this->added) );
     }
+    
+    public function getRawTimestamp(): int
+    {
+        return $this->added;
+    }
 
     public function isObjectInSync(): bool
     {

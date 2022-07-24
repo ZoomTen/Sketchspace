@@ -3,33 +3,85 @@
 {% block mainContent %}
 	<section class="boxing">
 		<header>
-			<h2>Browse Latest</h2>
-			<nav>
+			<h2>{% yield subBrowseHeader %}</h2>
+			<nav id="browse-upper-nav" class="browse-nav">
 				<ul>
-					<li>Previous</li>
-					<li>Next</li>
+					<li>
+						{% if (!empty($first_timestamp)): %}
+						<a href="?after={{{ $first_timestamp }}}&limit={{{ $limit }}}">
+						{% endif; %}
+						Previous
+						{% if (!empty($first_timestamp)): %}
+						</a>
+						{% endif; %}
+					</li>
+					<li>
+						{% if (!empty($last_timestamp)): %}
+						<a href="?after={{{ $last_timestamp }}}&limit={{{ $limit }}}">
+						{% endif; %}
+						Next
+						{% if (!empty($last_timestamp)): %}
+						</a>
+						{% endif; %}
+					</li>
 				</ul>
 			</nav>
 		</header>
+		
+		<form action="" method="get" class="inline-form">
+			<fieldset>
+				<label for="browse-limit">Limit to:</label>
+				<select id="browse-limit" name="limit">
+					<option>10</option>
+					<option>20</option>
+					<option>50</option>
+				</select>
+				<span>searches</span>
+				<button>Go</button>
+			</fieldset>
+		</form>
 		
 		<p>
 			This is a category description
 		</p>
 		
 		<ul class="gallery">
-			{% for ($i=0; $i<10; $i++): %}
+			{% foreach ($submissions as $sub): %}
+			{% $owner = $sub->getAssociatedUser()->getUsername(); %}
+			{% $section = $sub->getSubcategory(); %}
 			<li>
-				<img loading="lazy" src="/assets/287.jpg"><br>
-				<a href="#">Deviation title</a>
+				<a href="/submission/{{{ $sub->getId() }}}"><img loading="lazy" src="/{{{ $sub->getThumbnailLocation() }}}"></a><br>
+				<div class="_desc">
+					<span class="_title"><a href="/submission/{{{ $sub->getId() }}}">{{{ $sub->getSubject() }}}</a>
+					by <a href="/user/{{{ $owner }}}">{{{ $owner }}}</a></span>
+					<br>
+					<span class="_section">in <a href="/submissions/section/{{{ $section->getId() }}}">{{{ $section->name }}}</a></span>
+				</div>
 			</li>
-			{% endfor; %}
+			{% endforeach; %}
 		</ul>
 		
 		<footer>
-			<nav>
+			<nav id="browse-lower-nav" class="browse-nav">
 				<ul>
-					<li>Previous</li>
-					<li>Next</li>
+					<li>
+						{% if (!empty($first_timestamp)): %}
+						<a href="?after={{{ $first_timestamp }}}&limit={{{ $limit }}}">
+						{% endif; %}
+						Previous
+						{% if (!empty($first_timestamp)): %}
+						</a>
+						{% endif; %}
+					</li>
+					<li>
+						{% if (!empty($last_timestamp)): %}
+						<a href="?after={{{ $last_timestamp }}}&limit={{{ $limit }}}">
+						{% endif; %}
+						Next
+						{% if (!empty($last_timestamp)): %}
+						</a>
+						{% endif; %}
+					</li>
 				</ul>
 			</nav>
 		</footer>

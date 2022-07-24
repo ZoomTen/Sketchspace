@@ -485,10 +485,35 @@ button {
 }
 
 .gallery img {
-	max-width: 100%;
-	max-height: 100px;
+	max-width: calc(100% - 2em);
+	height: 100px;
+	object-fit: contain;
 }
 
+.gallery ._desc {
+  font-size: .8em;
+}
+
+.gallery ._section {
+  font-size: .8em;
+  font-weight: bold;
+}
+
+.browse-nav ul {
+  display: flex;
+  width: 100%;
+  margin: 0;
+  justify-content: space-between;
+  list-style-type: none;
+  height: 0;
+  font-size: 1em;
+  position: relative;
+  top: -1em;
+}
+
+#browse-lower-nav {
+  margin-top: 1em;
+}
 @media screen and (max-width: 64em){
   .page-container {
     max-width: 100%;
