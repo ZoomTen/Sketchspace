@@ -10,6 +10,8 @@ require_once 'Requests/UserPage.php';
 require_once 'Requests/Register.php';
 require_once 'Requests/Login_Logout.php';
 require_once 'Requests/Submission.php';
+require_once 'Requests/BrowseSubmissions.php';
+require_once 'Requests/AddSubmission.php';
 
 Route::pathNotFound(function()
 {
