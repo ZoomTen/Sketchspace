@@ -30,6 +30,9 @@ const SKETCHSPACE_SUPPORTED_MIMETYPES = [
 const SKETCHSPACE_UPLOAD_DIR = 'assets/submissions';
 const SKETCHSPACE_THUMB_DIR  = 'assets/thumbs';
 
+// max login time: 1hr
+const SKETCHSPACE_MAX_LOGIN_TIME = 60 * 60; // seconds
+
 // use libraries
 require_once 'Library/Util.php';
 require_once 'Library/Database.php';

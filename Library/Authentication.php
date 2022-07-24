@@ -37,8 +37,8 @@ class Authentication
                     self::unsetAll();
                 }
 
-                // automatically log out after an hour
-                if (time() > $_SESSION[self::SESSION_LASTLOGIN] + (60*60)) {
+                // automatically log out after SKETCHSPACE_MAX_LOGIN_TIME seconds
+                if (time() > $_SESSION[self::SESSION_LASTLOGIN] + SKETCHSPACE_MAX_LOGIN_TIME) {
                     self::unsetAll();
                 }
             }
