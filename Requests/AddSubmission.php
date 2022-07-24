@@ -153,17 +153,13 @@ Route::add('/submit', function()
                 array_push($messages, ['error', 'Error: ' . $e->getMessage()]);
                 break;
             }
-            array_push($messages, ['success', 'Upload successful! You should be able to view it at: /submission/'.$submission->getId()]);
+            array_push($messages, ['success', 'Upload successful!']);
             $successful = true;
         } while (false);
     }
 
     if ($successful) {
-        Template::view('Views/_layout.html',[
-            'logged_in_user' => Authentication::getCurrentUser(),
-            'hide_login_form' => false,
-            'messages' => $messages
-        ]);
+        header("Location: /submission/".$submission->getId(), true, ResponseCode::FOUND);
     } else {
         $_SESSION['acsrf'] = bin2hex(random_bytes(32));
 
