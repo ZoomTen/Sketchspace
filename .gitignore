@@ -5,8 +5,9 @@
 /phpdoc.phar
 /.buildpath
 /.project
-/assets/submissions/*.jpg
-/assets/submissions/*.png
-/assets/submissions/*.bmp
-/assets/submissions/*.gif
-/assets/thumbs/*.jpg
+/public/assets/submissions/*.jpg
+/public/assets/submissions/*.png
+/public/assets/submissions/*.bmp
+/public/assets/submissions/*.gif
+/public/assets/thumbs/*.jpg
+/vendor/*

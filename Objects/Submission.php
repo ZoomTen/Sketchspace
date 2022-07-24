@@ -12,9 +12,6 @@ use Sketchspace\Enum\Queries;
 use Sketchspace\Object\BasicObject;
 use Sketchspace\Exception\SubmissionException;
 
-// external objects
-require_once 'Objects/User.php';
-
 /**
  * Corresponds to <Prefix>_submissions
  */

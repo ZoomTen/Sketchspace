@@ -134,6 +134,6 @@ use Sketchspace\Object\Subcategory;
     // don't expose PHP version
     header_remove('X-Powered-By');
 
-require_once 'views.php';
+require_once 'Main/views.php';
 
 })(); // iife end
