@@ -408,13 +408,13 @@ class Submission implements BasicObject
     public function setSubject(string $subject): void
     {
         $this->in_sync = false;
-        $this->subject = Util::sanitize(trim($subject));
+        $this->subject = trim($subject);
     }
 
     public function setDescription(string $description): void
     {
         $this->in_sync = false;
-        $this->description = Util::sanitize(trim($description));
+        $this->description = trim($description);
     }
     
     public function setFilename(string $filename): void
