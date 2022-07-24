@@ -84,12 +84,19 @@ h1 {
   font-size: 0;
 }
 
-#main-menu,main .boxing h2 {
+#main-menu {
+  text-transform: lowercase;
+  letter-spacing: .05em;
+  border-bottom: 1px solid var(--dark-accent);
+}
+
+#main-menu, main .boxing h2 {
   text-align: center;
 }
 
 #main-menu li {
-  display: inline;
+  display: inline-block;
+  margin: 0 .5em;
 }
 
 #main-menu li:before {
@@ -465,6 +472,21 @@ button {
 
 #submission-image {
   max-width: 100%;
+}
+
+.gallery {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, 180px);
+	grid-auto-rows: 150px;
+	justify-content: center;
+	margin: 0;
+	list-style-type: none;
+	text-align: center;
+}
+
+.gallery img {
+	max-width: 100%;
+	max-height: 100px;
 }
 
 @media screen and (max-width: 64em){

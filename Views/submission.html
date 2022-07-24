@@ -25,8 +25,8 @@
             <h3>Details</h3>
             <ul>
                 <li><span>Author:</span> <a href="/user/{{{ $user->getUsername() }}}">{{{ $user->getUsername() }}}</a></li>
-                <li><span>Category:</span> <a href="/category/{{{ $catg->getId() }}}">{{{ $catg->name }}}</a></li>
-                <li><span>Section:</span> <a href="/subcategory/{{{ $subc->getId() }}}">{{{ $subc->name }}}</a></li>
+                <li><span>Category:</span> <a href="/submissions/category/{{{ $catg->getId() }}}">{{{ $catg->name }}}</a></li>
+                <li><span>Section:</span> <a href="/submissions/section/{{{ $subc->getId() }}}">{{{ $subc->name }}}</a></li>
                 <li><span>Views:</span>
                     <ul>
                         <li><span>Overall:</span> 999999</li>

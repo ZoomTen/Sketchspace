@@ -1,0 +1,37 @@
+{% extends Views/_layout.html %}
+
+{% block mainContent %}
+	<section class="boxing">
+		<header>
+			<h2>Browse Latest</h2>
+			<nav>
+				<ul>
+					<li>Previous</li>
+					<li>Next</li>
+				</ul>
+			</nav>
+		</header>
+		
+		<p>
+			This is a category description
+		</p>
+		
+		<ul class="gallery">
+			{% for ($i=0; $i<10; $i++): %}
+			<li>
+				<img loading="lazy" src="/assets/287.jpg"><br>
+				<a href="#">Deviation title</a>
+			</li>
+			{% endfor; %}
+		</ul>
+		
+		<footer>
+			<nav>
+				<ul>
+					<li>Previous</li>
+					<li>Next</li>
+				</ul>
+			</nav>
+		</footer>
+	</section>
+{% endblock %}

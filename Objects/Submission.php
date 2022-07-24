@@ -290,6 +290,8 @@ class Submission implements BasicObject
 
             return User::fromStatement($q);
         }
+        
+        return false;
     }
 
     /**
