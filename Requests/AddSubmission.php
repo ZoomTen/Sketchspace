@@ -117,7 +117,25 @@ Route::add('/submit', function()
             
             // upload the image
             $random = Util::generateRandomString(6);
-            $ext = pathinfo($file['name'])['extension'];
+            
+            // ensure file extensions based on MIME type
+            $ext = "unk";
+            switch ($image_mime) {
+                case 'image/png':
+                    $ext = "png";
+                    break;
+                case 'image/gif':
+                    $ext = "gif";
+                    break;
+                case 'image/jpeg':
+                    $ext = "jpg";
+                    break;
+                case 'image/bmp':
+                case 'image/x-ms-bmp':
+                    $ext = "bmp";
+                    break;
+            }
+            
             $name = basename($file['name'], '.'.$ext);
             
             $orgnl_filename = SKETCHSPACE_UPLOAD_DIR.'/'.$name.'-'.$random.'.'.$ext;
