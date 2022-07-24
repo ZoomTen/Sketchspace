@@ -283,6 +283,18 @@ main {
   max-width: 100%;
 }
 
+#nav-sidebar {
+  order: 0;
+}
+
+#content-container > main {
+  order: 1;
+}
+
+#featured-sidebar {
+  order: 2;
+}
+
 #nav-sidebar, #featured-sidebar {
   background-color: var(--inner-bg-color-accent);
 }

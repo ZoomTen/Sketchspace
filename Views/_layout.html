@@ -58,8 +58,20 @@
 				{% endif; %}
 				{% endif; %}
 			</header>
-
+			<hr>
 			<div id="content-container">
+				<main>
+					{% if (!empty($messages)): %}
+						<div class="visually-hidden"><h2>Notifications</h2></div>
+						<ul class="notifications">
+						{% foreach ($messages as $message): %}
+							<li class="notification-{{{ $message[0] }}}">{{{ $message[1] }}}</li>
+						{% endforeach; %}
+						</ul>
+					{% endif; %}
+					{% yield mainContent %}
+				</main>
+				<hr>
 				<div id="nav-sidebar">
 					<section class="boxing">
 						<header>
@@ -103,17 +115,7 @@
 						</ul>
 					</section>
 				</div>
-				<main>
-					{% if (!empty($messages)): %}
-						<div class="visually-hidden"><h2>Notifications</h2></div>
-						<ul class="notifications">
-						{% foreach ($messages as $message): %}
-							<li class="notification-{{{ $message[0] }}}">{{{ $message[1] }}}</li>
-						{% endforeach; %}
-						</ul>
-					{% endif; %}
-					{% yield mainContent %}
-				</main>
+				<hr>
 				<div id="featured-sidebar">
 					<section class="boxing">
 						<header>
