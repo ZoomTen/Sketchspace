@@ -3,7 +3,10 @@ networks:
 
 volumes:
   dbdata:
-  
+  sspcache:
+  sspsubs:
+  sspthumbs:
+
 services:
   app:
     image: richarvey/nginx-php-fpm:3.1.6
@@ -14,6 +17,9 @@ services:
       - ./Objects:/var/www/html/Objects
       - ./Requests:/var/www/html/Requests
       - ./Views:/var/www/html/Views
+      - sspcache:/var/www/html/cache
+      - sspsubs:/var/www/html/public/assets/submissions
+      - sspthumbs:/var/www/html/public/assets/thumbs
       - ./sketchspace.nginx.conf:/etc/nginx/sites-available/default.conf
     ports:
       - ${SERVICE_PORT:?must specify the service port}:8080
@@ -21,6 +27,14 @@ services:
       - db
     networks:
       - sketchspace
+    environment:
+      #PUID: ${PUID:?use PUID=`id -u $USER`}
+      #PGID: ${PGID:?use PGID=`id -g $USER`}
+      SSP_DB_HOST: db
+      SSP_DB_NAME: sketchspace
+      SSP_DB_USER: sketchspace
+      SSP_DB_PASS: sketchspace
+      SSP_DB_PREFIX: ssp
 
   db:
     image: mariadb:11.1.2

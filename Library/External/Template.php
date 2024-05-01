@@ -29,7 +29,7 @@ namespace CodeShack;
 class Template {
 
 	static array $blocks = [];
-	static string $cache_path = 'cache/';
+	static string $cache_path = __DIR__ . '/../../cache/';
 	static bool $cache_enabled = FALSE;
 
 	static function view($file, $data = array()) {

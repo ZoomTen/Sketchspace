@@ -71,11 +71,11 @@ use Sketchspace\Object\Subcategory;
     // init
     Database::initDb(
         'mysql',        // type
-        'db',    // host
-        'sketchspace',  // db
-        'sketchspace',  // user
-        'sketchspace',  // password
-        'sk'            // prefix
+        $_ENV["SSP_DB_HOST"],    // host
+        $_ENV["SSP_DB_NAME"],  // db
+        $_ENV["SSP_DB_USER"],  // user
+        $_ENV["SSP_DB_PASS"],  // password
+        $_ENV["SSP_DB_PREFIX"]            // prefix
     );
 
     User::initTables();

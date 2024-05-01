@@ -11,7 +11,7 @@ use Sketchspace\Exception\TooManyRequestsException;
  * Portions (c) delight-im
  */
 class ThrottleManagement {
-    private const SESSION_FILE = ".throttle.json";
+    private const SESSION_FILE = __DIR__ . "/../cache/.throttle.json";
 
     private static array $buckets;
 
