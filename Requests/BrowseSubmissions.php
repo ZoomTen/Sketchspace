@@ -18,9 +18,17 @@ Route::add('/submissions/latest', function()
         ? PHP_INT_MAX
         : filter_var($get['after'], FILTER_SANITIZE_NUMBER_INT);
     
+    if ($after && $after < 0) {
+        $after = 0;
+    }
+    
     $limit = (!Util::presentInArray('limit', $get))
         ? 20
         : filter_var($get['limit'], FILTER_SANITIZE_NUMBER_INT);
+        
+    if ($limit && $limit < 0) {
+        $limit = 0;
+    }
     
     $main_query = '
        select * from '.Database::getTable('Submission').'
