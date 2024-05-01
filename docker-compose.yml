@@ -1,0 +1,34 @@
+networks:
+  sketchspace:
+
+volumes:
+  dbdata:
+  
+services:
+  app:
+    image: richarvey/nginx-php-fpm:3.1.6
+    volumes:
+      - ./public:/var/www/html/public
+      - ./Library:/var/www/html/Library
+      - ./Main:/var/www/html/Main
+      - ./Objects:/var/www/html/Objects
+      - ./Requests:/var/www/html/Requests
+      - ./Views:/var/www/html/Views
+      - ./sketchspace.nginx.conf:/etc/nginx/sites-available/default.conf
+    ports:
+      - ${SERVICE_PORT:?must specify the service port}:8080
+    depends_on:
+      - db
+    networks:
+      - sketchspace
+
+  db:
+    image: mariadb:11.1.2
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./.sqlinit:/docker-entrypoint-initdb.d
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+    networks:
+      - sketchspace

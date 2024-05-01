@@ -71,7 +71,7 @@ use Sketchspace\Object\Subcategory;
     // init
     Database::initDb(
         'mysql',        // type
-        'localhost',    // host
+        'db',    // host
         'sketchspace',  // db
         'sketchspace',  // user
         'sketchspace',  // password
